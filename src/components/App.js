@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import keys from '../../config/keys';
+import axios from 'axios';
+import _ from 'lodash';
 
 import SearchBar from './SearchBar';
 import VideoList from './VideoList';
@@ -15,7 +16,11 @@ class App extends Component {
       selectedVideo: null
     };
 
-    axios.get(`https://www.googleapis.com/youtube/v3/search?key=${keys.youtubeAPIKey}&part=snippet&q=warriors&id&order=date&maxResults=20`)
+    this.videoSearch('');
+  }
+
+  videoSearch(term) {
+    axios.get(`https://www.googleapis.com/youtube/v3/search?key=${keys.youtubeAPIKey}&part=snippet&q=${term}&id&order=date&maxResults=20`)
       .then((videos) => this.setState({
         videos: videos.data.items,
         selectedVideo: videos.data.items[0]
@@ -23,9 +28,11 @@ class App extends Component {
   }
 
   render() {
+    const videoSearch = _.debounce((term) => { this.videoSearch(term); }, 300);
+
     return (
       <div>
-        <SearchBar />
+        <SearchBar onSearchTermChange={videoSearch} />
         <div className="row">
           <VideoDetail video={this.state.selectedVideo} />
           <VideoList videos={this.state.videos} onVideoSelect={(selectedVideo) => this.setState({ selectedVideo })} />
