@@ -18,7 +18,7 @@ class App extends Component {
     axios.get(`https://www.googleapis.com/youtube/v3/search?key=${keys.youtubeAPIKey}&part=snippet&q=warriors&id&order=date&maxResults=20`)
       .then((videos) => this.setState({
         videos: videos.data.items,
-        selectedVideo: videos[0]
+        selectedVideo: videos.data.items[0]
       }));
   }
 
@@ -26,8 +26,8 @@ class App extends Component {
     return (
       <div>
         <SearchBar />
-        <VideoDetail video={this.state.videos[0]} />
-        <VideoList videos={this.state.videos} />
+        <VideoDetail video={this.state.selectedVideo} />
+        <VideoList videos={this.state.videos} onVideoSelect={(selectedVideo) => this.setState({ selectedVideo })} />
       </div>
     );
   }
