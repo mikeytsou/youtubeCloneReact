@@ -3,6 +3,7 @@ import axios from 'axios';
 import keys from '../../config/keys';
 
 import SearchBar from './SearchBar';
+import VideoList from './VideoList';
 
 class App extends Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class App extends Component {
     return (
       <div>
         <SearchBar />
+        <VideoList videos={this.state.videos} />
       </div>
     );
   }
